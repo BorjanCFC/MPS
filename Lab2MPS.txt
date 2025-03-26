@@ -1,0 +1,47 @@
+# VLEZNA EQU F0H
+# IZLEZNA EQU FF00H
+# MEM_URED EQU 00FFH
+# ORG 0000H
+
+START:    JMP DOCNI_146
+
+PRODOLZHI:	   IN VLEZNA
+
+	   MOV B,A
+	   MOV C,A
+
+	   MVI D,00
+
+PROVERI:	   RRC
+	   JNC NAMALI
+	   INR D
+
+NAMALI:	   DCR C
+	   JNZ PROVERI
+
+	   MOV A,D
+	   SUI 05
+	   JC SOBERI
+
+KOMPLEMENT:   MOV A,B
+	   CMA
+	   ADI 01
+	   STA IZLEZNA
+	   JMP DOCNI_146   
+
+
+SOBERI:	   LDA MEM_URED
+	   ADD B
+	   STA IZLEZNA
+
+DOCNI_146:   MVI E, 146d
+
+DOCNI_1:        MVI D, 89d 
+
+DOCNI:              DCR D        
+	   JNZ DOCNI       
+	   DCR E
+	   JNZ DOCNI_1
+	   JMP PRODOLZHI
+
+# END
